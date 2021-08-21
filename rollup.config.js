@@ -1,7 +1,7 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from 'rollup-plugin-typescript2';
-import styles from "rollup-plugin-styles";
+import styles from 'rollup-plugin-styles';
 import notify from 'rollup-plugin-notify';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
@@ -11,7 +11,7 @@ const inputFileName = 'src/index.ts';
 
 const globals = {
   jquery: '$',
-  '@flasher/flasher': 'Flasher'
+  '@flasher/flasher': 'Flasher',
 };
 
 export default [
@@ -22,13 +22,13 @@ export default [
         name: moduleName,
         file: pkg.main,
         format: 'umd',
-        globals: globals,
+        globals,
       },
       {
         name: moduleName,
         file: pkg.main.replace('.js', '.min.js'),
         format: 'umd',
-        globals: globals,
+        globals,
         plugins: [
           terser({
             format: {
@@ -39,7 +39,7 @@ export default [
       },
     ],
     external: [
-      '@flasher/flasher', 'jquery'
+      '@flasher/flasher', 'jquery',
     ],
     plugins: [
       notify(),
@@ -59,8 +59,10 @@ export default [
       styles(),
     ],
     output: [
-      { file: pkg.main.replace('.js', '.cjs.js'), format: 'cjs', globals: globals, exports: 'auto' },
-      { file: pkg.main.replace('.js', '.es.js'), format: 'es', globals: globals, },
+      {
+        file: pkg.main.replace('.js', '.cjs.js'), format: 'cjs', globals, exports: 'auto',
+      },
+      { file: pkg.main.replace('.js', '.es.js'), format: 'es', globals },
     ],
   },
 ];

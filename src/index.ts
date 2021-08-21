@@ -1,12 +1,19 @@
-import Flasher, { Envelope, FlasherInterface, FlasherOptions } from '@flasher/flasher';
+import Flasher, {
+  Envelope,
+  FlasherInterface,
+  FlasherOptions,
+  QueueableInterface,
+} from '@flasher/flasher';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 type SwalType = typeof Swal;
 
-export default class SweetAlertFactory implements FlasherInterface {
+export default class SweetAlertFactory implements FlasherInterface, QueueableInterface {
   swalToastr?: SwalType;
+
+  queue: Envelope[] = [];
 
   render(envelope: Envelope): void {
     const { notification } = envelope;
@@ -17,6 +24,18 @@ export default class SweetAlertFactory implements FlasherInterface {
 
   renderOptions(options: FlasherOptions): void {
     this.swalToastr = this.swalToastr || Swal.mixin(options as SweetAlertOptions);
+  }
+
+  addEnvelope(envelope: Envelope): void {
+    this.queue?.push(envelope);
+  }
+
+  async renderQueue() {
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < this.queue.length; i++) {
+      // eslint-disable-next-line no-await-in-loop
+      await this.render(this.queue[i]);
+    }
   }
 }
 
