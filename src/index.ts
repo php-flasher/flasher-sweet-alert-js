@@ -15,11 +15,11 @@ export default class SweetAlertFactory implements FlasherInterface, QueueableInt
 
   queue: Envelope[] = [];
 
-  render(envelope: Envelope): void {
+  render(envelope: Envelope) {
     const { notification } = envelope;
     const { options } = notification;
 
-    this.swalToastr?.fire(options as SweetAlertOptions);
+    return this.swalToastr?.fire(options as SweetAlertOptions);
   }
 
   renderOptions(options: FlasherOptions): void {
