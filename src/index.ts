@@ -19,7 +19,14 @@ export default class SweetAlertFactory implements FlasherInterface, QueueableInt
     const { notification } = envelope;
     const { options } = notification;
 
-    return this.swalToastr?.fire(options as SweetAlertOptions);
+    return this.swalToastr?.fire(options as SweetAlertOptions).then(function (promise) {
+      window.dispatchEvent(new CustomEvent('flasher:sweet_alert:promise', {
+        detail: {
+          promise,
+          envelope,
+        },
+      }));
+    });
   }
 
   renderOptions(options: FlasherOptions): void {
