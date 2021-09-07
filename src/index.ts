@@ -15,7 +15,7 @@ export default class SweetAlertFactory implements FlasherInterface, QueueableInt
 
   queue: Envelope[] = [];
 
-  render(envelope: Envelope) {
+  public render(envelope: Envelope) {
     const { notification } = envelope;
     const { options } = notification;
 
@@ -29,15 +29,19 @@ export default class SweetAlertFactory implements FlasherInterface, QueueableInt
     });
   }
 
-  renderOptions(options: FlasherOptions): void {
+  public renderOptions(options: FlasherOptions): void {
     this.swalToastr = this.swalToastr || Swal.mixin(options as SweetAlertOptions);
   }
 
-  addEnvelope(envelope: Envelope): void {
+  public addEnvelope(envelope: Envelope): void {
     this.queue?.push(envelope);
   }
 
-  async renderQueue() {
+  public resetQueue() {
+    this.queue = [];
+  }
+
+  public async renderQueue() {
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < this.queue.length; i++) {
       // eslint-disable-next-line no-await-in-loop
